@@ -17,5 +17,5 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <std/bool.h>
+#include <stdbool.h>
 #endif

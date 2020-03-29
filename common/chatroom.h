@@ -19,6 +19,19 @@ struct RecvMsg {
     struct Msg msg;
     int retval;
 };
+
+struct SendMsg {
+    struct Msg msg;
+    int retval;
+};
+
+int chat_send(struct Msg msg, int fd) {
+    if(send(fd,(void *)&msg,sizeof(msg),0) <= 0) {
+        return -1;
+    }
+    return 0;
+}
+
 struct RecvMsg chat_recv(int fd) {
     struct RecvMsg tmp;
     memset(&tmp,0,sizeof(tmp));
@@ -26,4 +39,5 @@ struct RecvMsg chat_recv(int fd) {
         tmp.retval = -1;
     } 
     return tmp;
+}
 #endif
