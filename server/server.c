@@ -41,6 +41,7 @@ void *work(void *arg) {
     int *sub = (int *)arg;
     int client_fd = client[*sub].fd;
     struct RecvMsg rmsg;
+    printf(GREEN"Login "NONE ": %s\n",rmsg.msg.from);
     while(1) {
         rmsg = chat_recv(client_fd);
         if(rmsg.retval < 0) {

@@ -18,4 +18,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <stdbool.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #endif

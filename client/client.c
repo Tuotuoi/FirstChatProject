@@ -11,9 +11,15 @@
 
 #include "../common/color.h"
 char *conf = "./client.conf";
+int sockfd;
+void logout(int signalnum) {
+    close(sockfd);
+    exit(3);
+    printf("revc logout\n");
+}
 
 int main() {
-    int port,sockfd;
+    int port;
     struct Msg msg;
     char ip[20] = {0};
     port = atoi(get_value(conf,"SERVER_PORT"));
@@ -39,6 +45,27 @@ int main() {
     if(rmsg.msg.flag == 3) {
         close(sockfd);
     }
-
+    pid_t pid;
+    if((pid = fork()) < 0) {
+        perror("fork");
+    }
+    if(pid == 0) {
+    signal(SIGINT,logout);
+        system("clear");
+        char c;
+        while(c != EOF) {
+            printf(L_PINK"please Input Message :"NONE"\n");
+            scanf("%[^\n]s",msg.message);
+            c = getchar();
+            chat_send(msg,sockfd);
+            memset(msg.message,0,sizeof(msg.message));
+            system("clear");
+        } 
+        close(sockfd);
+    }
+    else {
+        wait(NULL);
+        close(sockfd);
+    }
     return 0;
 }
