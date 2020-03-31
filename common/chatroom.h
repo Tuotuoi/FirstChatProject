@@ -32,6 +32,13 @@ int chat_send(struct Msg msg, int fd) {
     return 0;
 }
 
+int chat_memory_send(char *memory, int fd){
+    if(send(fd,(void *)&memory,strlen(memory),0) <= 0) {
+        return -1;
+    }
+    return 0;
+}
+
 struct RecvMsg chat_recv(int fd) {
     struct RecvMsg tmp;
     memset(&tmp,0,sizeof(tmp));

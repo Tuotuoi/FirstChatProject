@@ -20,5 +20,7 @@
 #include <stdbool.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 
 #endif

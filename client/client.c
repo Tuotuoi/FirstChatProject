@@ -8,9 +8,10 @@
 #include "../common/common.h"
 #include "../common/chatroom.h"
 #include "../common/tcp_client.h"
-
 #include "../common/color.h"
+
 char *conf = "./client.conf";
+
 int sockfd;
 void logout(int signalnum) {
     close(sockfd);
@@ -21,6 +22,8 @@ void logout(int signalnum) {
 int main() {
     int port;
     struct Msg msg;
+    struct winsize size;
+    ioctl(STDIN_FILENO,TIOCGWINSZ,&size);
     char ip[20] = {0};
     port = atoi(get_value(conf,"SERVER_PORT"));
     strcpy(ip,get_value(conf,"SERVER_IP"));
@@ -57,9 +60,14 @@ int main() {
             printf(L_PINK"please Input Message :"NONE"\n");
             scanf("%[^\n]s",msg.message);
             c = getchar();
+            for(int i = 0; i < size.ws_col - strlen(msg.message) - 1; i++) {
+                printf(" ");
+            }
+            printf(GREEN"%s :"NONE,msg.from);
+            printf(L_GREEN"%s"NONE,msg.message);
             chat_send(msg,sockfd);
             memset(msg.message,0,sizeof(msg.message));
-            system("clear");
+            //system("clear");
         } 
         close(sockfd);
     }

@@ -52,7 +52,8 @@ void *work(void *arg) {
             client[*sub].online = 0;
             return NULL;
         }
-
+        sprintf(recvmemory[*sub],"%s: %s\n",rmsg.msg.from, rmsg.msg.message);
+        chat_memory_send(recvmemory[*sub],client_fd);
         printf(BLUE"%s"NONE": %s\n",rmsg.msg.from, rmsg.msg.message);
     }
     return NULL;
@@ -91,15 +92,17 @@ void *work(void *arg) {
              continue;
          } 
          //同意连接
-        msg.flag = 2;
-        strcpy(msg.message,"Welcome to this chat room!");
-        chat_send(msg,fd);
-        int sub;
-        sub = find_sub();//
-        client[sub].online = 1;
-        client[sub].fd = fd;
-        strcpy(client[sub].name, recvmsg.msg.from);
-        pthread_create(&client[sub].tid,NULL,work,NULL);
+         msg.flag = 2;
+         strcpy(msg.message,"Welcome to this chat room!");
+         chat_send(msg,fd);
+         int sub;
+         sub = find_sub();//
+         client[sub].online = 1;
+         client[sub].fd = fd;
+         strcpy(client[sub].name, recvmsg.msg.from);
+         pthread_create(&client[sub].tid,NULL,work,NULL);
+
+
 
      }//子线程
 
