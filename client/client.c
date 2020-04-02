@@ -71,6 +71,9 @@ int main() {
             if (msg.message[0] == '@') {
                 msg.flag = 1;
             }
+            if (msg.message[0] == '#') {
+                msg.flag = 3;
+            }
             chat_send(msg, sockfd);
             memset(msg.message, 0, sizeof(msg.message));
             system("clear");
@@ -90,6 +93,8 @@ int main() {
                 printf(YELLOW"通知信息: " NONE "%s\n", rmsg.msg.message);
             } else if (rmsg.msg.flag == 1){
                 printf(L_BLUE"%s"L_GREEN"*"NONE": %s\n", rmsg.msg.from, rmsg.msg.message);
+            } else if (rmsg.msg.flag == 3) {
+                printf(GREEN"当前在线人数为 ：%s\n"NONE,rmsg.msg.message);
             } else {
                 printf("Error!\n");
             }

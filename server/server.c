@@ -23,7 +23,7 @@ char *conf = "./server.conf";
 
 struct User *client;
 int sum = 0;
-
+bool check_online(char *name);
 
 void send_all(struct Msg msg) {
     for (int i = 0; i < MAX_CLIENT; i++) {
@@ -38,6 +38,15 @@ int check_name(char *name) {
             return i;
     }
     return -1;
+}
+
+int how_many_online() {
+    int cnt = 0;
+    for(int i  = 0; i < MAX_CLIENT; i++) {
+        if(client[i].online)
+        cnt++;
+    }
+    return cnt;
 }
 
 void *work(void *arg){
@@ -70,12 +79,20 @@ void *work(void *arg){
                 int ind;
                 if ((ind = check_name(to)) < 0) {
                     //告知不在线
-                    sprintf(rmsg.msg.message, "%s is not online.", to);
+                    sprintf(rmsg.msg.message, "%s is not online.\n", to);
                     rmsg.msg.flag = 2;
                     chat_send(rmsg.msg, client_fd);
                     continue;
                 } 
                 chat_send(rmsg.msg, client[ind].fd);
+            }
+        } else if (rmsg.msg.flag == 3) {
+            if(rmsg.msg.message[0] == '#') {
+                int cnt = how_many_online();
+                sprintf(rmsg.msg.message, "%s",(char)cnt);
+                rmsg.msg.flag = 3;
+                chat_send(rmsg.msg,client_fd);
+                continue;
             }
         }
     }
